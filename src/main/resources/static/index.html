@@ -3,8 +3,7 @@
   crossorigin="anonymous" />
 <link rel="dns-prefetch" href="https://www.googletagmanager.com" />
 
-<link rel="stylesheet" href="https://www.paulooctavio.com.br/javax.faces.resource/css/website.min.css.jsf?ln=default"
-  media="screen and (min-width: 576px)" />
+<link rel="stylesheet" href="https://www.paulooctavio.com.br/javax.faces.resource/css/website.min.css.jsf?ln=default" />
 <link rel="shortcut icon" href="https://www.paulooctavio.com.br/javax.faces.resource/img/favicon.ico.jsf?ln=default" />
 
 <nav id="main-navbar" class="navbar navbar-expand-xl navbar-light bg-light fixed-top">
@@ -40,106 +39,200 @@
                 onkeyup="filterData(event.target.value);" </div>
             </div>
             <div class="row" id="row-cards">
-             
+
 
             </div>
-            <!-- <div class="text-center cmp-paginacao-container">
 
-              <a id="form-pesquisa:j_idt95:0:j_idt96" href="listaobras.html"
-                onclick="mojarra.ab(this,event,'action','@form','@form');return false"
-                class="mr-1 btn btn-outline-primary active ">1</a>
-
-              <a id="form-pesquisa:j_idt95:1:j_idt96" href="listaobras2.html"
-                onclick="mojarra.ab(this,event,'action','@form','@form');return false"
-                class="mr-1 btn btn-outline-dark">2</a>
-
-              <a id="form-pesquisa:j_idt95:2:j_idt96" href="listaobras3.hmtl"
-                onclick="mojarra.ab(this,event,'action','@form','@form');return false"
-                class="mr-1 btn btn-outline-dark">3</a>
-
-              <a id="form-pesquisa:j_idt95:2:j_idt96" href="listaobras4.hmtl"
-                onclick="mojarra.ab(this,event,'action','@form','@form');return false"
-                class="mr-1 btn btn-outline-dark">4</a>
-              <a id="form-pesquisa:j_idt95:2:j_idt96" href="listaobras5.hmtl"
-                onclick="mojarra.ab(this,event,'action','@form','@form');return false"
-                class="mr-1 btn btn-outline-dark">5</a>
-
-
-
-            </div> -->
           </div>
+
 
           <div class="d-flex justify-content-left" { display: flex; /* Ativa o Flexbox */ justify-content: center; /*
             Centraliza horizontalmente */ align-items: center; /* Centraliza verticalmente */}>
             <a href="./inicio.html" class="btn btn-sm pl-5 pr-5 btn-dark" previewlistener="true">VOLTAR</a>
           </div>
+        </div>
 
 
 
-          <script>
+        <!-- Modal -->
+        <div class="modal fade" id="modalVerMais" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle"
+          aria-hidden="true">
+          <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+              <div class="modal-header">
+                <h5 class="modal-title" id="modalVerMaisTitle">-</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                  <span aria-hidden="true">&times;</span>
+                </button>
+              </div>
+              <div class="modal-body">
+                <div class="row">
+                  <div class="col-4">
+                    <div id="modalImageFuncionario"
+                      style="background-image: url(''); background-size: cover; background-position: center; height: 200px; border-radius: 10px;">
+                    </div>
+                  
 
-            var rowCards = document.getElementById("row-cards");
-            var elements = "";
-            var data = {};
+                  </div>
+                  <div class="col-8">
+                    <p><strong>Setor:</strong> <span id="modalSetorFuncionario"></span></p>
+                  <div id="modalListGroupComputadores"></div>
+                  <div id="modalListGroupMonitores"></div> 
+                  </div>
+                </div>
+              </div>
+              <div class="modal-footer">
 
-            async function getData() {
-              const response = await fetch("http://127.0.0.1:8080/funcionarios");
-              data = await response.json();
-              printJSON(data);
-            }
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                <!-- <button type="button" class="btn btn-primary">Save changes</button> -->
+              </div>
+            </div>
+          </div>
+        </div>
 
 
-            async function printJSON(json) {
-              elements = "";
 
-              var count = Object.keys(json).length
-              alert(count)
 
-              for (let index = 0; index < count; index++) {
-                var relogio = json[index]["Relógio"];
-                var serie = json[index]["Nº serie"];
-                var link = json[index]["Link Control ID"];
+        <script src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.slim.min.js"
+          integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj"
+          crossorigin="anonymous"></script>
+        <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js"
+          integrity="sha384-9/reFTGAW83EW2RDu2S0VKaIzap3H66lZH81PoYlFhbGU+6BZp6G7niu735Sk7lN"
+          crossorigin="anonymous"></script>
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/js/bootstrap.min.js"
+          integrity="sha384-+sLIOodYLS7CIrQpBjl+C7nPvqq+FbNUBDunl/OZv93DB7Ln/533i8e/mZXLi/P+"
+          crossorigin="anonymous"></script>
+        <script>
 
-                elements += ` <div class="col-10 offset-1 col-md-6 offset-md-3 col-xl-3 offset-xl-0">
+          var rowCards = document.getElementById("row-cards");
+          var elements = "";
+          var data = {};
+
+          async function getData() {
+            const response = await fetch("./../funcionarios");
+            data = await response.json();
+            printJSON(data);
+          }
+
+
+          async function printJSON(json) {
+            elements = "";
+
+            var count = Object.keys(json).length
+
+
+            for (let index = 0; index < count; index++) {
+              var nome = json[index]["nome"];
+              var setor = json[index]["setor"]["nome"];
+
+              elements += ` <div class="col-10 offset-1 col-md-6 offset-md-3 col-xl-3 offset-xl-0">
                 <div class="app-card-especial" style="">
-                  <div style="background-image: url('http://127.0.0.1:8080/funcionarios/image/${json[index]["id"]}'); background-size: cover; background-position: center; height: 200px; border-radius: 10px;"></div>
+                  <div style="background-image: url('./image/${json[index]["id"]}'); background-size: cover; background-position: center; height: 200px; border-radius: 10px;"></div>
                   <span style=" font-size: 1.2rem; margin-bottom: 20px; text-align: center;"
-                  class="d-block text-center app-title"> <strong>Local:</strong> ${relogio}<br> 
-                  <strong>Nº série:</strong> ${serie} </span>
+                  class="d-block text-center app-title"> <strong>Nome:</strong> ${nome}<br> 
+                  <strong>Setor:</strong> ${setor} </span>
                   <div class="d-flex justify-content-center align-items-center" { display: flex; /* Ativa o Flexbox */
                   justify-content: center; /* Centraliza horizontalmente */ align-items: center; /* Centraliza
                   verticalmente */}>
-                  <a href="${link}" class="btn btn-lg pl-5 pr-5 btn-primary btn-block" target="_blank" 
-                  previewlistener="true">ACESSE</a>
+                  <button  class="btn btn-lg pl-5 pr-5 btn-primary btn-block"  
+                   onclick="openModal(${index})">VER MAIS</button>
                   </div>
                   </div>
                   </div>`;
 
-              }
-
-              rowCards.innerHTML = elements;
-
             }
 
-            getData();
+            rowCards.innerHTML = elements;
 
-            function filterData(search) {
-              search = search.toLowerCase();
+          }
+
+          getData();
+
+          function filterData(search) {
+            search = search.toLowerCase();
+
+            //se pesquisa for vazia listar dados brutos/lista completa
+            if (search == undefined || search == null || search.length == 0) {
+              printJSON(data);
+              return;
+            }
+
+            var filteredData = data.filter(d => d["Relógio"].toLowerCase().includes(search) || d["Nº serie"].toLowerCase().includes(search));
+            console.log(filteredData)
+            printJSON(filteredData);
+          }
+
+
+
+
+        </script>
+
+        <script>
+         async function openModal(index) {
+            var funcionario = data[index]
+
+            var computadores  = await fetch(`./../computadores/funcionario/${funcionario["id"]}`);
+            var monitores  = await fetch(`./../monitores/funcionario/${funcionario["id"]}`);
+
+
+            var modalVerMais = document.getElementById('modalVerMais');
+            var modalVerMaisTitle = document.getElementById('modalVerMaisTitle');
+            var modalSetorFuncionario = document.getElementById('modalSetorFuncionario');
+            var modalImageFuncionario = document.getElementById('modalImageFuncionario');
+            var modalListGroupComputadores = document.getElementById('modalListGroupComputadores');
+            var modalListGroupMonitores = document.getElementById('modalListGroupMonitores');
+
+            modalVerMaisTitle.innerText = funcionario['nome'];
+            modalSetorFuncionario.innerText = funcionario['setor']['nome'];
+            modalImageFuncionario.style.backgroundImage = `url('./image/${funcionario["id"]}')`;
+
+            var computadoresJson = await computadores.json();
+            var computadoresElements = "";
+            for (let index = 0; index < computadoresJson.length; index++) {
+              computadoresElements += `<div class="list-group"> <a href="#" class="list-group-item list-group-item-action active"> <strong>Computador ${index+1}: </strong>`;
               
-              //se pesquisa for vazia listar dados brutos/lista completa
-              if (search == undefined || search == null || search.length == 0) {
-                printJSON(data);
-                return;
-              }
+              computadoresElements += `<a href="#" class="list-group-item list-group-item-action">${computadoresJson[index]["nome"]}</a>`;
+              computadoresElements += `<a href="#" class="list-group-item list-group-item-action">${computadoresJson[index]["processador"]}</a>`;
+              computadoresElements += `<a href="#" class="list-group-item list-group-item-action">${computadoresJson[index]["memoria"]}</a>`;
+              if (computadoresJson[index]["armazenamento"]) computadoresElements += `<a href="#" class="list-group-item list-group-item-action">${computadoresJson[index]["armazenamento"]}</a>`;
+              // link para o computador
+              if (computadoresJson[index]["idMilvus"] && computadoresJson[index]["idMilvus"] > 0) computadoresElements += `<a target="_blank" href="https://releaseapp.milvus.com.br/devices/details/${computadoresJson[index]["idMilvus"]}" class="list-group-item list-group-item-action">Ver no Milvus</a>`;
 
-              var filteredData = data.filter(d => d["Relógio"].toLowerCase().includes(search) || d["Nº serie"].toLowerCase().includes(search));
-              console.log(filteredData)
-              printJSON(filteredData);
+              computadoresElements += `</div>`;
             }
 
+            modalListGroupComputadores.innerHTML = computadoresElements;
+
+            var monitoresJson = await monitores.json();
+            var monitoresElements = "";
+
+            for (let index = 0; index < monitoresJson.length; index++) {
+              monitoresElements += `<div class="list-group"> <a href="#" class="list-group-item list-group-item-action active"> <strong>Monitor ${index+1}: </strong>`;
+              monitoresElements += `<a href="#" class="list-group-item list-group-item-action">${monitoresJson[index]["modeloMonitor"]}</a>`;
+              //formatar tamanho do monitor sem 0 a direita e adicionar aspas
+              monitoresElements += `<a href="#" class="list-group-item list-group-item-action">${monitoresJson[index]["tamanhoMonitor"].replace(/\.0+$/,'') + '"'}</a>`;
+
+              monitoresElements += `</div>`;
+            }
+
+            modalListGroupMonitores.innerHTML = monitoresElements;
+            
 
 
 
-          </script>
+
+
+
+
+
+
+
+            $('#modalVerMais').modal('show');
+          }
+
+        </script>
+
+
+
 
 </html>
