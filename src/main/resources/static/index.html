@@ -32,24 +32,45 @@
           <h1 style="margin-bottom: 80px;" class="w-100 text-uppercase app-title text-center">
             LISTAGEM DE OBRAS
           </h1>
-          <div class="col-12">
+          <div class=" col-lg-9">
             <div class="form-group">
               <label for="exampleInputEmail1">Pesquisar</label>
-              <input type="text" class="form-control" placeholder="Local ou Nº Série"
+              <input type="text" class="form-control" placeholder="Nome do funcionário" id="imputPesquisa"
                 onkeyup="filterData(event.target.value);" </div>
             </div>
+
+            <div class="accordion d-lg-none" id="accordionExample">
+              <div class="card">
+                <div class="card-header" id="headingOne">
+                  <h2 class="mb-0">
+                    <button class="btn btn-link btn-block text-left" type="button" data-toggle="collapse" data-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+                      Filtros
+                    </button>
+                  </h2>
+                </div>
+            
+                <div id="collapseOne" class="collapse" aria-labelledby="headingOne" data-parent="#accordionExample">
+                  <div class="card-body" id="checkGroupMd"></div>
+                </div>
+              </div>
+            </div>
+
             <div class="row" id="row-cards">
 
 
             </div>
 
           </div>
-
-
-          <div class="d-flex justify-content-left" { display: flex; /* Ativa o Flexbox */ justify-content: center; /*
-            Centraliza horizontalmente */ align-items: center; /* Centraliza verticalmente */}>
-            <a href="./inicio.html" class="btn btn-sm pl-5 pr-5 btn-dark" previewlistener="true">VOLTAR</a>
+          <div class="col-lg-3 d-none d-lg-block pt-4 ">
+            <!-- filtros checkbox -->
+            <div class="card">
+              <div class="card-header">
+                Filtros
+              </div>
+              <div class="card-body" id="checkGroupLg"></div>
+            </div>
           </div>
+
         </div>
 
 
@@ -71,13 +92,13 @@
                     <div id="modalImageFuncionario"
                       style="background-image: url(''); background-size: cover; background-position: center; height: 200px; border-radius: 10px;">
                     </div>
-                  
+
 
                   </div>
                   <div class="col-8">
                     <p><strong>Setor:</strong> <span id="modalSetorFuncionario"></span></p>
-                  <div id="modalListGroupComputadores"></div>
-                  <div id="modalListGroupMonitores"></div> 
+                    <div id="modalListGroupComputadores"></div>
+                    <div id="modalListGroupMonitores"></div>
                   </div>
                 </div>
               </div>
@@ -125,10 +146,10 @@
               var nome = json[index]["nome"];
               var setor = json[index]["setor"]["nome"];
 
-              elements += ` <div class="col-10 offset-1 col-md-6 offset-md-3 col-xl-3 offset-xl-0">
+              elements += ` <div class="col-10 offset-1 offset-md-0  col-md-6  col-xl-4 offset-xl-0">
                 <div class="app-card-especial" style="">
-                  <div style="background-image: url('./image/${json[index]["id"]}'); background-size: cover; background-position: center; height: 200px; border-radius: 10px;"></div>
-                  <span style=" font-size: 1.2rem; margin-bottom: 20px; text-align: center;"
+                  <div style="background-image: url('./../files/${json[index]["foto"] && json[index]["foto"].length > 0 ? json[index]["foto"] : 'default_profile.webp'} '); background-size: cover; background-position: center; height: 200px; border-radius: 10px;"></div>
+                  <span style=" font-size: 0.9rem; margin-bottom: 20px; text-align: center;"
                   class="d-block text-center app-title"> <strong>Nome:</strong> ${nome}<br> 
                   <strong>Setor:</strong> ${setor} </span>
                   <div class="d-flex justify-content-center align-items-center" { display: flex; /* Ativa o Flexbox */
@@ -148,19 +169,32 @@
 
           getData();
 
-          function filterData(search) {
+          async function filterData(search) {
             search = search.toLowerCase();
 
             //se pesquisa for vazia listar dados brutos/lista completa
+            var qtdeSetores = setores.filter(s => s["isChecked"]).length;
             if (search == undefined || search == null || search.length == 0) {
+              await getData();
+              if(qtdeSetores > 0){
+              data = data.filter(d => setores.filter(s => s["isChecked"] && s["id"] == d["setor"]["id"]).length > 0);
+            }
               printJSON(data);
               return;
             }
 
-            var filteredData = data.filter(d => d["Relógio"].toLowerCase().includes(search) || d["Nº serie"].toLowerCase().includes(search));
-            console.log(filteredData)
-            printJSON(filteredData);
+            data = data.filter(d => d["nome"].toLowerCase().includes(search) );
+            //verificar setor selecionado
+           
+            if(qtdeSetores > 0){
+              data = data.filter(d => setores.filter(s => s["isChecked"] && s["id"] == d["setor"]["id"]).length > 0);
+            }
+            console.log(data)
+            printJSON(data);
+
           }
+
+          
 
 
 
@@ -168,11 +202,11 @@
         </script>
 
         <script>
-         async function openModal(index) {
+          async function openModal(index) {
             var funcionario = data[index]
 
-            var computadores  = await fetch(`./../computadores/funcionario/${funcionario["id"]}`);
-            var monitores  = await fetch(`./../monitores/funcionario/${funcionario["id"]}`);
+            var computadores = await fetch(`./../computadores/funcionario/${funcionario["id"]}`);
+            var monitores = await fetch(`./../monitores/funcionario/${funcionario["id"]}`);
 
 
             var modalVerMais = document.getElementById('modalVerMais');
@@ -189,8 +223,8 @@
             var computadoresJson = await computadores.json();
             var computadoresElements = "";
             for (let index = 0; index < computadoresJson.length; index++) {
-              computadoresElements += `<div class="list-group"> <a href="#" class="list-group-item list-group-item-action active"> <strong>Computador ${index+1}: </strong>`;
-              
+              computadoresElements += `<div class="list-group"> <a href="#" class="list-group-item list-group-item-action active"> <strong>Computador ${index + 1}: </strong>`;
+
               computadoresElements += `<a href="#" class="list-group-item list-group-item-action">${computadoresJson[index]["nome"]}</a>`;
               computadoresElements += `<a href="#" class="list-group-item list-group-item-action">${computadoresJson[index]["processador"]}</a>`;
               computadoresElements += `<a href="#" class="list-group-item list-group-item-action">${computadoresJson[index]["memoria"]}</a>`;
@@ -207,16 +241,23 @@
             var monitoresElements = "";
 
             for (let index = 0; index < monitoresJson.length; index++) {
-              monitoresElements += `<div class="list-group"> <a href="#" class="list-group-item list-group-item-action active"> <strong>Monitor ${index+1}: </strong>`;
+              monitoresElements += `<div class="list-group"> <a href="#" class="list-group-item list-group-item-action active"> <strong>Monitor ${index + 1}: </strong>`;
               monitoresElements += `<a href="#" class="list-group-item list-group-item-action">${monitoresJson[index]["modeloMonitor"]}</a>`;
               //formatar tamanho do monitor sem 0 a direita e adicionar aspas
-              monitoresElements += `<a href="#" class="list-group-item list-group-item-action">${monitoresJson[index]["tamanhoMonitor"].replace(/\.0+$/,'') + '"'}</a>`;
+              monitoresElements += `<a href="#" class="list-group-item list-group-item-action">${monitoresJson[index]["tamanhoMonitor"].replace(/\.0+$/, '') + '"'}</a>`;
 
               monitoresElements += `</div>`;
             }
 
             modalListGroupMonitores.innerHTML = monitoresElements;
-            
+
+          
+
+
+
+
+
+
 
 
 
@@ -229,6 +270,79 @@
 
             $('#modalVerMais').modal('show');
           }
+          
+          var setores = [];
+          function buscarSetores() {
+            fetch('./../setores')
+              .then(response => response.json())
+              .then(data => {
+                setores = data;
+                printFilters();
+              });
+          }
+
+          buscarSetores();
+          
+
+
+
+          function printFilters(){
+            var checkGroupMd = document.getElementById('checkGroupMd');
+            var checkGroupLg = document.getElementById('checkGroupLg');
+
+            
+
+            var elements = "";
+
+            for (let index = 0; index < setores.length; index++) {
+              elements += `<div class="form-check p-3 p-lg-1">
+              <input class="form-check-input" type="checkbox" value="" id="setor-${setores[index]['id']}" onchange="selecionarSetores(${setores[index]['id']})" ${setores[index]['isChecked'] ? 'checked="checked"' : ''}>
+              <label class="form-check-label" for="${setores[index]['id']}">
+                ${setores[index]['nome']}
+              </label>
+            </div>`;
+            
+          }
+
+          elements += `<button class="btn btn-danger btn-block" onclick="limparFiltros()">Limpar Filtros</button>`;
+
+          checkGroupMd.innerHTML = elements;
+          checkGroupLg.innerHTML = elements;
+        }
+
+
+        function selecionarSetores(id){
+          var check = document.getElementById(`setor-${id}`);
+          console.log(check);
+
+          //armazenar o estado do checkbox no array de setores["isChecked"]
+          for (let index = 0; index < setores.length; index++) {
+            if(setores[index]['id'] == id){
+              setores[index]['isChecked'] = !setores[index]['isChecked'];
+              // sair do loop
+              break;
+            }
+          }
+
+          printFilters();
+          var search = document.getElementById("imputPesquisa").value;
+          filterData(search);
+
+        }
+
+        // limpar filtros
+        function limparFiltros(){
+          for (let index = 0; index < setores.length; index++) {
+            setores[index]['isChecked'] = false;
+          }
+          printFilters();
+          var search = document.getElementById("imputPesquisa").value;
+          filterData(search);
+        }
+
+
+
+        
 
         </script>
 
