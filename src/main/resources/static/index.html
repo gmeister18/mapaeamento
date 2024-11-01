@@ -218,7 +218,7 @@
 
             modalVerMaisTitle.innerText = funcionario['nome'];
             modalSetorFuncionario.innerText = funcionario['setor']['nome'];
-            modalImageFuncionario.style.backgroundImage = `url('./image/${funcionario["id"]}')`;
+            modalImageFuncionario.style.backgroundImage = `url('./../files/${funcionario["foto"] && funcionario["foto"].length > 0 ? funcionario["foto"] : 'default_profile.webp'}')`;
 
             var computadoresJson = await computadores.json();
             var computadoresElements = "";
@@ -230,7 +230,7 @@
               computadoresElements += `<a href="#" class="list-group-item list-group-item-action">${computadoresJson[index]["memoria"]}</a>`;
               if (computadoresJson[index]["armazenamento"]) computadoresElements += `<a href="#" class="list-group-item list-group-item-action">${computadoresJson[index]["armazenamento"]}</a>`;
               // link para o computador
-              if (computadoresJson[index]["idMilvus"] && computadoresJson[index]["idMilvus"] > 0) computadoresElements += `<a target="_blank" href="https://releaseapp.milvus.com.br/devices/details/${computadoresJson[index]["idMilvus"]}" class="list-group-item list-group-item-action">Ver no Milvus</a>`;
+              if (computadoresJson[index]["idMilvus"] && computadoresJson[index]["idMilvus"] > 0) computadoresElements += `<a target="_blank" href="https://app.milvus.com.br/devices/details/${computadoresJson[index]["idMilvus"]}" class="list-group-item list-group-item-action">Ver no Milvus</a>`;
 
               computadoresElements += `</div>`;
             }

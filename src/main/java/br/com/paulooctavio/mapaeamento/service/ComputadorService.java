@@ -52,7 +52,11 @@ public class ComputadorService {
                 computador.setNome(mapper.readTree(json).get("lista").get(0).get("hostname").asText());
                 computador.setProcessador(mapper.readTree(json).get("lista").get(0).get("processador").asText());
                 computador.setMemoria(mapper.readTree(json).get("lista").get(0).get("ram_total").asText());
-                computador.setArmazenamento(mapper.readTree(json).get("lista").get(0).get("armazenamento").asText());
+                if (mapper.readTree(json).get("lista").get(0).get("armazenamento") != null &&
+                        !mapper.readTree(json).get("lista").get(0).get("armazenamento").asText().equals("null")) {
+                    computador
+                            .setArmazenamento(mapper.readTree(json).get("lista").get(0).get("armazenamento").asText());
+                }
 
             }
         } catch (Exception e) {
